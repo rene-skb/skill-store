@@ -53,16 +53,19 @@
     
     /* Hero */
     .hero {
-      min-height: 70vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 6rem 3rem;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem;
       max-width: 900px;
+      margin: 0 auto;
     }
     
     .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-size: clamp(3rem, 10vw, 5rem);
       font-weight: 600;
       line-height: 1.1;
       margin-bottom: 1.5rem;
@@ -80,6 +83,7 @@
     .cta-row {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 1.5rem;
       flex-wrap: wrap;
     }
@@ -121,8 +125,11 @@
     
     /* Demo Section */
     .demo-section {
-      padding: 6rem 3rem;
+      padding: 6rem 2rem;
       border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     
     .demo-section h2 {
@@ -210,8 +217,9 @@
     
     /* Formats */
     .formats-section {
-      padding: 4rem 3rem;
+      padding: 4rem 2rem;
       border-top: 1px solid var(--border);
+      text-align: center;
     }
     
     .formats-section h2 {
@@ -226,6 +234,7 @@
       display: flex;
       gap: 0.75rem;
       flex-wrap: wrap;
+      justify-content: center;
     }
     
     .format-tag {
@@ -239,12 +248,15 @@
     
     /* CTA Section */
     .cta-section {
-      padding: 6rem 3rem;
+      padding: 6rem 2rem;
       border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
     }
     
     .cta-box {
       max-width: 500px;
+      text-align: center;
     }
     
     .cta-box h2 {
@@ -260,6 +272,7 @@
     .email-form {
       display: flex;
       gap: 0.75rem;
+      justify-content: center;
     }
     
     .email-form input {
@@ -293,6 +306,7 @@
       border-top: 1px solid var(--border);
       font-size: 0.85rem;
       color: var(--text-muted);
+      text-align: center;
     }
     
     footer a { color: var(--text-muted); }
