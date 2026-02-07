@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog Composer — Release Notes, Automated</title>
+  <meta name="description" content="Turn git commits into polished changelogs. One command.">
+  <style>
+    /* Reset & Variables */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: rgba(255,255,255,0.1);
+      --text: #ffffff;
+      --text-muted: rgba(255,255,255,0.5);
+      --accent: #22c55e;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'SF Mono', ui-monospace, monospace;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Navigation - minimal */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .nav-cta {
+      font-size: 0.9rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* Hero - BOLD */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 12vw, 6rem);
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: opacity 0.2s;
+    }
+
+    .hero-cta:hover {
+      opacity: 0.9;
+    }
+
+    .price {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Demo Section */
+    .demo-section {
+      padding: 8rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .demo-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .demo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .demo-card-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .demo-card-content {
+      padding: 1.25rem;
+    }
+
+    .demo-card pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .demo-card.before pre {
+      color: var(--text-muted);
+    }
+
+    .demo-card.after pre {
+      color: var(--text);
+    }
+
+    .demo-card.after .highlight {
+      color: var(--accent);
+    }
+
+    /* How it works - minimal */
+    .how-section {
+      padding: 4rem 2rem 8rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .how-section h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .step-content p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-section h2 {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .email-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .email-form input {
+      flex: 1;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .email-form input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .email-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .email-form button {
+      padding: 1rem 1.5rem;
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .email-form button:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--text);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .email-form {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">Skills Store</a>
+    <a href="#get" class="nav-cta">Get the Skill</a>
+  </nav>
+
+  <section class="hero">
+    <h1>Release notes.<br><span>Done.</span></h1>
+    <p>Turn your git commits into polished changelogs. One command. Human-readable results.</p>
+    <a href="#get" class="hero-cta">Join Waitlist →</a>
+    <p class="price">$9 — one-time purchase</p>
+  </section>
+
+  <section class="demo-section">
+    <p class="demo-label">Before → After</p>
+    <div class="demo-grid">
+      <div class="demo-card before">
+        <div class="demo-card-header">Your Git Log</div>
+        <div class="demo-card-content">
+          <pre>fix bug
+update deps
+wip
+more fixes
+refactor thing
+fix typo
+add feature
+cleanup
+bump version
+fix tests</pre>
+        </div>
+      </div>
+      <div class="demo-card after">
+        <div class="demo-card-header">Generated Changelog</div>
+        <div class="demo-card-content">
+          <pre><span class="highlight">## v2.4.0</span>
+
+<span class="highlight">### ✨ Features</span>
+- Added dark mode support
+- New export to PDF option
+
+<span class="highlight">### 🐛 Bug Fixes</span>
+- Fixed crash on empty input
+- Resolved login timeout
+
+<span class="highlight">### 🔧 Improvements</span>
+- Reduced bundle size by 23%</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-section">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div class="step-content">
+          <h3>Install the skill</h3>
+          <p>Drop it into your Claude Code skills folder. 30 seconds.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div class="step-content">
+          <h3>Run a command</h3>
+          <p>"Generate changelog since v2.0" — natural language works.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div class="step-content">
+          <h3>Ship it</h3>
+          <p>Polished, categorized, ready to publish.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" id="get">
+    <h2>Get Early Access</h2>
+    <p>Join the waitlist. We'll let you know when it's ready.</p>
+    <form class="email-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="email" name="email" placeholder="you@example.com" required>
+      <button type="submit">Join</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>Built by <a href="https://scottkbell.com">Scott Bell</a> · <a href="/">More Skills</a></p>
+  </footer>
+
+</body>
+</html>
