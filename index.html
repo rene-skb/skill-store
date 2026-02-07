@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skills Store — Agent Tools That Work</title>
-  <meta name="description" content="Premium skills for Claude Code and AI agents. One-time purchase, instant productivity.">
+  <title>Skills Store</title>
+  <meta name="description" content="Premium skills for Claude Code and AI agents.">
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -15,16 +15,10 @@
     :root {
       --bg: #0a0a0a;
       --surface: #111111;
-      --border: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.06);
       --text: #ffffff;
-      --text-muted: rgba(255,255,255,0.5);
-      --accent: #3b82f6;
-      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-
-    html {
-      font-size: 16px;
-      scroll-behavior: smooth;
+      --text-muted: rgba(255,255,255,0.4);
+      --font: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
     }
 
     body {
@@ -34,259 +28,152 @@
       line-height: 1.6;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
-    /* Nav */
+    /* Nav - minimal */
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 1.5rem 2rem;
+      padding: 2rem 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 100;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(10px);
     }
 
     .logo {
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--text-muted);
     }
 
     .nav-link {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      transition: color 0.2s;
-    }
-
-    .nav-link:hover {
-      color: var(--text);
-    }
-
-    /* Hero */
-    .hero {
-      min-height: 70vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 8rem 2rem 4rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      font-weight: 600;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 span {
-      color: var(--accent);
-    }
-
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 480px;
-      margin-bottom: 1rem;
-    }
-
-    .hero-meta {
-      display: flex;
-      gap: 2rem;
-      margin-top: 2rem;
       font-size: 0.85rem;
       color: var(--text-muted);
     }
 
-    .hero-meta span {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .nav-link:hover { color: var(--text); }
+
+    /* Hero - stripped back */
+    .hero {
+      padding: 8rem 3rem 10rem;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
     }
 
-    /* Skills Grid */
-    .skills-section {
-      padding: 4rem 2rem 6rem;
-      max-width: 1000px;
+    .hero h1 {
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 400px;
       margin: 0 auto;
     }
 
-    .section-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 3rem;
+    /* Skills - let them breathe */
+    .skills {
+      padding: 0 3rem 8rem;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
-    .skills-grid {
+    .skill {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-    }
-
-    .skill-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2rem;
-      transition: border-color 0.2s, transform 0.2s;
-      display: block;
-    }
-
-    .skill-card:hover {
-      border-color: rgba(255,255,255,0.2);
-      transform: translateY(-2px);
-    }
-
-    .skill-card h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .skill-card p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .skill-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .skill-price {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .skill-tag {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      padding: 0.25rem 0.75rem;
-      background: rgba(255,255,255,0.05);
-      border-radius: 100px;
-    }
-
-    .skill-card.soon {
-      opacity: 0.5;
-    }
-
-    .skill-card.soon .skill-tag {
-      background: rgba(251, 191, 36, 0.2);
-      color: #fbbf24;
-    }
-
-    /* CTA */
-    .cta-section {
-      padding: 6rem 2rem;
-      text-align: center;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      padding: 2.5rem 0;
       border-top: 1px solid var(--border);
     }
 
-    .cta-section h2 {
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 600;
-      margin-bottom: 0.75rem;
+    .skill:last-child {
+      border-bottom: 1px solid var(--border);
     }
 
-    .cta-section > p {
+    .skill h2 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill p {
+      font-size: 0.9rem;
       color: var(--text-muted);
+      max-width: 400px;
+      line-height: 1.6;
+    }
+
+    .skill-price {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .skill:hover h2 { color: var(--text); }
+
+    /* CTA - one clear action */
+    .cta {
+      padding: 6rem 3rem 8rem;
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 1.25rem;
+      font-weight: 500;
       margin-bottom: 2rem;
     }
 
     .email-form {
       display: flex;
-      gap: 0.75rem;
-      max-width: 380px;
-      margin: 0 auto;
+      gap: 0.5rem;
     }
 
     .email-form input {
       flex: 1;
-      padding: 0.9rem 1rem;
+      padding: 1rem;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 6px;
       color: var(--text);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
-    .email-form input::placeholder {
-      color: var(--text-muted);
-    }
-
-    .email-form input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
+    .email-form input::placeholder { color: var(--text-muted); }
+    .email-form input:focus { outline: none; border-color: rgba(255,255,255,0.2); }
 
     .email-form button {
-      padding: 0.9rem 1.5rem;
-      background: var(--accent);
-      color: white;
-      font-weight: 600;
+      padding: 1rem 1.5rem;
+      background: var(--text);
+      color: var(--bg);
+      font-weight: 500;
+      font-size: 0.9rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: opacity 0.2s;
     }
 
-    .email-form button:hover {
-      opacity: 0.9;
-    }
-
-    .cta-note {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 1rem;
-    }
+    .email-form button:hover { opacity: 0.9; }
 
     /* Footer */
     footer {
-      padding: 2rem;
+      padding: 3rem;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    footer a {
-      color: var(--text-muted);
-    }
-
-    footer a:hover {
-      color: var(--text);
-    }
+    footer a { color: var(--text-muted); }
 
     /* Responsive */
-    @media (max-width: 640px) {
-      .hero-meta {
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-
-      .email-form {
-        flex-direction: column;
-      }
-
-      .skills-grid {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 600px) {
+      nav, .hero, .skills, .cta, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .skill { grid-template-columns: 1fr; gap: 1rem; }
+      .email-form { flex-direction: column; }
     }
   </style>
 </head>
@@ -294,92 +181,52 @@
 
   <nav>
     <span class="logo">Skills Store</span>
-    <a href="#notify" class="nav-link">Get Notified</a>
+    <a href="#notify" class="nav-link">Get notified</a>
   </nav>
 
   <section class="hero">
-    <h1>Skills that<br><span>actually work.</span></h1>
-    <p>Premium tools for Claude Code and AI agents. One-time purchase. Instant productivity.</p>
-    <div class="hero-meta">
-      <span>💰 Pay once, own forever</span>
-      <span>⚡ 30-second setup</span>
-      <span>🔧 No subscriptions</span>
-    </div>
+    <h1>Tools for Claude Code</h1>
+    <p>One-time purchase. Instant setup. No subscriptions.</p>
   </section>
 
-  <section class="skills-section">
-    <p class="section-label">Available Skills</p>
-    <div class="skills-grid">
+  <section class="skills">
 
-      <a href="/changelog-composer/" class="skill-card">
-        <h3>Changelog Composer</h3>
-        <p>Turn messy git commits into polished, categorized release notes. One command.</p>
-        <div class="skill-meta">
-          <span class="skill-price">$9</span>
-          <span class="skill-tag">Developer</span>
-        </div>
-      </a>
-
-      <a href="/color-palette/" class="skill-card">
-        <h3>Color Palette Generator</h3>
-        <p>One brand color → complete accessible color system with dark mode.</p>
-        <div class="skill-meta">
-          <span class="skill-price">$7</span>
-          <span class="skill-tag">Design</span>
-        </div>
-      </a>
-
-      <a href="/podcast-notes/" class="skill-card">
-        <h3>Podcast Show Notes</h3>
-        <p>Transform transcripts into timestamps, summaries, quotes, and SEO descriptions.</p>
-        <div class="skill-meta">
-          <span class="skill-price">$12</span>
-          <span class="skill-tag">Content</span>
-        </div>
-      </a>
-
-      <div class="skill-card soon">
-        <h3>A11y Copilot</h3>
-        <p>Real-time accessibility auditing with one-click fixes. WCAG compliant.</p>
-        <div class="skill-meta">
-          <span class="skill-price">$15</span>
-          <span class="skill-tag">Coming Soon</span>
-        </div>
+    <a href="/changelog-composer/" class="skill">
+      <div>
+        <h2>Changelog Composer</h2>
+        <p>Git commits → polished release notes. Categorized, formatted, ready to ship.</p>
       </div>
+      <span class="skill-price">$9</span>
+    </a>
 
-      <div class="skill-card soon">
-        <h3>README Bootstrapper</h3>
-        <p>Scan your codebase, generate comprehensive docs with setup and examples.</p>
-        <div class="skill-meta">
-          <span class="skill-price">$9</span>
-          <span class="skill-tag">Coming Soon</span>
-        </div>
+    <a href="/color-palette/" class="skill">
+      <div>
+        <h2>Color Palette Generator</h2>
+        <p>One brand color → complete accessible system with dark mode variants.</p>
       </div>
+      <span class="skill-price">$7</span>
+    </a>
 
-      <div class="skill-card soon">
-        <h3>Bitcoin Tax Calculator</h3>
-        <p>Parse wallet exports, calculate cost basis, generate tax reports.</p>
-        <div class="skill-meta">
-          <span class="skill-price">$25</span>
-          <span class="skill-tag">Coming Soon</span>
-        </div>
+    <a href="/podcast-notes/" class="skill">
+      <div>
+        <h2>Podcast Show Notes</h2>
+        <p>Transcript → timestamps, summaries, quotes, SEO descriptions.</p>
       </div>
+      <span class="skill-price">$12</span>
+    </a>
 
-    </div>
   </section>
 
-  <section class="cta-section" id="notify">
-    <h2>Get Early Access</h2>
-    <p>Launch pricing + first look at new skills.</p>
+  <section class="cta" id="notify">
+    <h2>New skills coming soon</h2>
     <form class="email-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
       <input type="email" name="email" placeholder="you@example.com" required>
-      <button type="submit">Notify Me</button>
+      <button type="submit">Notify me</button>
     </form>
-    <p class="cta-note">No spam. Just launches.</p>
   </section>
 
   <footer>
-    <p>Built by <a href="https://scottkbell.com">Scott Bell</a></p>
+    <p><a href="https://scottkbell.com">Scott Bell</a></p>
   </footer>
 
 </body>
