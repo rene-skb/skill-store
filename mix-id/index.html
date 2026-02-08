@@ -160,7 +160,7 @@
     }
 
     .terminal {
-      max-width: 640px;
+      max-width: 720px;
       margin: 0 auto;
       background: #0c0c0e;
       border: 1px solid var(--border);
@@ -285,13 +285,13 @@
     }
 
     .p-step h3 {
-      font-size: 1rem;
+      font-size: 1.15rem;
       font-weight: 500;
       margin-bottom: 0.4rem;
     }
 
     .p-step p {
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       color: var(--text-secondary);
       line-height: 1.5;
     }
@@ -334,15 +334,15 @@
     }
 
     .output-item h3 {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 500;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.4rem;
     }
 
     .output-item p {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
     /* CTA */
@@ -445,7 +445,7 @@
   <!-- Hero -->
   <section class="hero">
     <p class="hero-tag">Free · Open Source · CLI</p>
-    <h1>Paste a URL.<br>Get a tracklist.</h1>
+    <h1>paste a url<br>get a tracklist</h1>
     <p class="lead">Identify every track in a DJ mix with timestamps. One command, no account needed.</p>
 
     <div class="install-cmd" onclick="copyCmd(this)">
@@ -463,22 +463,22 @@
       <div class="terminal-bar">
         <span class="d r"></span><span class="d y"></span><span class="d g"></span>
       </div>
-      <div class="terminal-body"><span class="s">$</span> <span class="g">npx mix-id</span> <span class="s">friday-night-set.mp3</span>
+      <div class="terminal-body"><span class="s">$</span> <span class="g">npx mix-id</span> <span class="s">https://mixcloud.com/dynamicquality/friday-night-set</span>
 
-<span class="d">──────────────────────────────────────────────</span>
-<span class="b">TRACKLIST</span>
-<span class="d">──────────────────────────────────────────────</span>
+<span class="d">───────────────────────────────────────────────────────────────</span>
+<span class="b">TRACKLIST</span> <span class="s">— friday-night-set.mp3</span>
+<span class="d">───────────────────────────────────────────────────────────────</span>
 
- <span class="s"> 1.</span>  <span class="m">[00:00]</span>  Donna Summer — I Feel Love
- <span class="s"> 2.</span>  <span class="m">[04:12]</span>  Daft Punk — Around the World
- <span class="s"> 3.</span>  <span class="m">[08:45]</span>  Bicep — Glue
- <span class="s"> 4.</span>  <span class="m">[13:20]</span>  The Avalanches — Since I Left You
- <span class="s"> 5.</span>  <span class="m">[18:03]</span>  Caribou — Can't Do Without You
- <span class="s"> 6.</span>  <span class="m">[22:41]</span>  Peggy Gou — Starry Night
+ <span class="s"> 1.</span>  <span class="m">[00:00]</span>  Donna Summer — I Feel Love <span class="s">[I Remember Yesterday]</span>
+ <span class="s"> 2.</span>  <span class="m">[04:12]</span>  Daft Punk — Around the World <span class="s">[Homework]</span>
+ <span class="s"> 3.</span>  <span class="m">[08:45]</span>  Bicep — Glue <span class="s">[Bicep]</span>
+ <span class="s"> 4.</span>  <span class="m">[13:20]</span>  The Avalanches — Since I Left You <span class="s">[Since I Left You]</span>
+ <span class="s"> 5.</span>  <span class="m">[18:03]</span>  Caribou — Can't Do Without You <span class="s">[Our Love]</span>
+ <span class="s"> 6.</span>  <span class="m">[22:41]</span>  Peggy Gou — Starry Night <span class="s">[Once]</span>
  <span class="s"> ...</span>
 
-<span class="d">──────────────────────────────────────────────</span>
-<span class="s">24 tracks · 3 files saved</span></div>
+<span class="d">───────────────────────────────────────────────────────────────</span>
+<span class="s">24 tracks identified · 3 files saved</span></div>
     </div>
   </section>
 
@@ -490,22 +490,22 @@
     <div class="platform-row">
       <div class="platform">
         <!-- Mixcloud -->
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M2.462 8.596C1.11 8.596 0 9.706 0 11.06s1.11 2.462 2.462 2.462c1.353 0 2.462-1.11 2.462-2.462S3.815 8.596 2.462 8.596zM9.846 8.596c-1.353 0-2.462 1.11-2.462 2.462s1.11 2.462 2.462 2.462c1.353 0 2.462-1.11 2.462-2.462S11.198 8.596 9.846 8.596zM20.308 8.596l-3.692 2.462 3.692 2.462L24 11.058z"/></svg>
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M2.462 8.596C1.11 8.596 0 9.706 0 11.06s1.11 2.462 2.462 2.462c1.353 0 2.462-1.11 2.462-2.462S3.815 8.596 2.462 8.596zM9.846 8.596c-1.353 0-2.462 1.11-2.462 2.462s1.11 2.462 2.462 2.462c1.353 0 2.462-1.11 2.462-2.462S11.198 8.596 9.846 8.596zM20.308 8.596l-3.692 2.462 3.692 2.462L24 11.058z"/></svg>
         <span class="platform-name">Mixcloud</span>
       </div>
       <div class="platform">
         <!-- SoundCloud -->
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c-.009-.06-.048-.1-.098-.1zm-.899.828c-.06 0-.091.037-.104.094L0 14.479l.172 1.308c.013.06.045.094.104.094.053 0 .09-.04.104-.094l.2-1.308-.2-1.332c-.015-.06-.045-.094-.104-.094zm1.8-1.143c-.065 0-.105.05-.112.114l-.218 2.451.218 2.362c.007.063.047.114.112.114.063 0 .105-.05.114-.114l.248-2.363-.248-2.45c-.009-.064-.051-.114-.114-.114zm.899-.39c-.077 0-.119.063-.127.126l-.203 2.841.203 2.553c.008.07.05.127.127.127.076 0 .119-.058.127-.127l.232-2.553-.232-2.841c-.008-.063-.051-.126-.127-.126zm.9-.278c-.09 0-.131.07-.139.14l-.186 3.12.186 2.7c.008.076.049.14.139.14.088 0 .131-.064.14-.14l.209-2.7-.21-3.12c-.008-.07-.051-.14-.14-.14zm.9-.06c-.102 0-.143.083-.15.155l-.173 3.337.173 2.778c.007.083.048.155.15.155.1 0 .143-.072.15-.155l.198-2.778-.198-3.337c-.007-.072-.05-.155-.15-.155zm2.598-.238c-.02-.135-.098-.21-.234-.21-.133 0-.21.075-.233.21l-.145 3.63.145 2.803c.023.136.1.212.233.212.136 0 .215-.076.234-.212l.164-2.803-.164-3.63zm.9.038c-.024-.148-.108-.232-.254-.232-.148 0-.232.084-.256.232l-.127 3.592.127 2.776c.024.152.108.232.256.232.146 0 .23-.08.254-.232l.146-2.776-.146-3.592zm.898-.222c-.027-.164-.12-.258-.277-.258-.16 0-.252.094-.279.258l-.112 3.813.112 2.748c.027.166.12.258.279.258.157 0 .25-.092.277-.258l.126-2.748-.126-3.813zM20.055 7.14c-.988 0-1.893.346-2.607.92C17.162 5.238 14.814 3.2 12 3.2c-.69 0-1.36.124-1.984.348-.236.084-.3.17-.302.338v11.208c.003.164.13.3.298.312h10.043c1.64 0 2.945-1.328 2.945-2.952S21.695 7.14 20.055 7.14z"/></svg>
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c-.009-.06-.048-.1-.098-.1zm-.899.828c-.06 0-.091.037-.104.094L0 14.479l.172 1.308c.013.06.045.094.104.094.053 0 .09-.04.104-.094l.2-1.308-.2-1.332c-.015-.06-.045-.094-.104-.094zm1.8-1.143c-.065 0-.105.05-.112.114l-.218 2.451.218 2.362c.007.063.047.114.112.114.063 0 .105-.05.114-.114l.248-2.363-.248-2.45c-.009-.064-.051-.114-.114-.114zm.899-.39c-.077 0-.119.063-.127.126l-.203 2.841.203 2.553c.008.07.05.127.127.127.076 0 .119-.058.127-.127l.232-2.553-.232-2.841c-.008-.063-.051-.126-.127-.126zm.9-.278c-.09 0-.131.07-.139.14l-.186 3.12.186 2.7c.008.076.049.14.139.14.088 0 .131-.064.14-.14l.209-2.7-.21-3.12c-.008-.07-.051-.14-.14-.14zm.9-.06c-.102 0-.143.083-.15.155l-.173 3.337.173 2.778c.007.083.048.155.15.155.1 0 .143-.072.15-.155l.198-2.778-.198-3.337c-.007-.072-.05-.155-.15-.155zm2.598-.238c-.02-.135-.098-.21-.234-.21-.133 0-.21.075-.233.21l-.145 3.63.145 2.803c.023.136.1.212.233.212.136 0 .215-.076.234-.212l.164-2.803-.164-3.63zm.9.038c-.024-.148-.108-.232-.254-.232-.148 0-.232.084-.256.232l-.127 3.592.127 2.776c.024.152.108.232.256.232.146 0 .23-.08.254-.232l.146-2.776-.146-3.592zm.898-.222c-.027-.164-.12-.258-.277-.258-.16 0-.252.094-.279.258l-.112 3.813.112 2.748c.027.166.12.258.279.258.157 0 .25-.092.277-.258l.126-2.748-.126-3.813zM20.055 7.14c-.988 0-1.893.346-2.607.92C17.162 5.238 14.814 3.2 12 3.2c-.69 0-1.36.124-1.984.348-.236.084-.3.17-.302.338v11.208c.003.164.13.3.298.312h10.043c1.64 0 2.945-1.328 2.945-2.952S21.695 7.14 20.055 7.14z"/></svg>
         <span class="platform-name">SoundCloud</span>
       </div>
       <div class="platform">
         <!-- YouTube -->
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
         <span class="platform-name">YouTube</span>
       </div>
       <div class="platform">
         <!-- Bandcamp -->
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>
         <span class="platform-name">Bandcamp</span>
       </div>
       <span class="platform-plus">+ 1000 more</span>
