@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mix-id — Know Every Track in Your Mix</title>
+  <meta name="description" content="Identify every track in a DJ mix from a URL or file. One command. Free and open source.">
+  <meta property="og:title" content="mix-id — Know Every Track in Your Mix">
+  <meta property="og:description" content="Identify every track in a DJ mix. Paste a Mixcloud, SoundCloud, or YouTube link. Get a full tracklist.">
+  <meta property="og:type" content="website">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: rgba(255,255,255,0.1);
+      --text: #ffffff;
+      --text-muted: rgba(255,255,255,0.5);
+      --accent: #8b5cf6;
+      --accent-glow: rgba(139, 92, 246, 0.15);
+      --green: #22c55e;
+      --yellow: #eab308;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'SF Mono', ui-monospace, monospace;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-links .gh {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--accent-glow);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 11vw, 5.5rem);
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero .subtitle {
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+    }
+
+    .install-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      max-width: 520px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+
+    .install-box:hover { border-color: var(--accent); }
+
+    .install-box .prompt { color: var(--text-muted); }
+    .install-box .cmd { color: var(--green); }
+    .install-box .url { color: var(--text-muted); font-size: 0.85rem; }
+
+    .install-box .copy-hint {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .install-box:hover .copy-hint { opacity: 1; }
+
+    .install-box.copied .copy-hint { color: var(--green); opacity: 1; }
+
+    .hero-note {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .hero-note a { color: var(--accent); text-decoration: none; }
+    .hero-note a:hover { text-decoration: underline; }
+
+    /* Terminal Demo */
+    .demo-section {
+      padding: 6rem 2rem;
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .terminal {
+      background: #0c0c0c;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+
+    .terminal-title {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .terminal-body .muted { color: var(--text-muted); }
+    .terminal-body .green { color: var(--green); }
+    .terminal-body .purple { color: var(--accent); }
+    .terminal-body .yellow { color: var(--yellow); }
+    .terminal-body .dim { color: rgba(255,255,255,0.3); }
+
+    /* Sources */
+    .sources-section {
+      padding: 4rem 2rem 6rem;
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .sources-section h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .sources-section > p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+
+    .source-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .source-card:hover { border-color: rgba(255,255,255,0.2); }
+
+    .source-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .source-name { font-size: 0.9rem; font-weight: 500; }
+    .source-plus {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* How It Works */
+    .how-section {
+      padding: 4rem 2rem 6rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .how-section h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 2.5rem; }
+
+    .step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 2.25rem;
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-glow);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: var(--accent);
+      border-radius: 50%;
+      font-size: 0.9rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    .step-content p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Output Formats */
+    .formats-section {
+      padding: 4rem 2rem 6rem;
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .formats-section h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .format-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+
+    .format-ext {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .format-card h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    .format-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 6rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-section h2 {
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-section > p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    .email-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 420px;
+      margin: 0 auto 1rem;
+    }
+
+    .email-form input {
+      flex: 1;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: var(--font);
+    }
+
+    .email-form input::placeholder { color: var(--text-muted); }
+    .email-form input:focus { outline: none; border-color: var(--accent); }
+
+    .email-form button {
+      padding: 1rem 1.5rem;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-family: var(--font);
+      transition: opacity 0.2s;
+    }
+
+    .email-form button:hover { opacity: 0.9; }
+
+    .cta-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero { padding: 0 1.25rem; }
+      .install-box { flex-wrap: wrap; font-size: 0.85rem; }
+      .format-grid { grid-template-columns: 1fr; }
+      .source-grid { grid-template-columns: repeat(2, 1fr); }
+      .email-form { flex-direction: column; }
+      .nav-links .hide-mobile { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">mix<span>-id</span></a>
+    <div class="nav-links">
+      <a href="#how" class="hide-mobile">How it works</a>
+      <a href="https://github.com/skip5this/mix-id" class="gh" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">🎧 Free &amp; open source</div>
+    <h1>Know every track<br>in your <span>mix.</span></h1>
+    <p class="subtitle">Paste a Mixcloud, SoundCloud, or YouTube link. Get a full tracklist with timestamps. One command.</p>
+    
+    <div class="install-box" onclick="copyInstall(this)">
+      <span class="prompt">$</span>
+      <span><span class="cmd">npx mix-id</span> <span class="url">your-mix.mp3</span></span>
+      <span class="copy-hint">click to copy</span>
+    </div>
+    
+    <p class="hero-note">Requires <a href="https://nodejs.org">Node.js</a> 18+. Dependencies auto-install on macOS.</p>
+  </section>
+
+  <!-- Terminal Demo -->
+  <section class="demo-section">
+    <p class="section-label">What you get</p>
+    <div class="terminal">
+      <div class="terminal-header">
+        <span class="dot r"></span>
+        <span class="dot y"></span>
+        <span class="dot g"></span>
+        <span class="terminal-title">Terminal</span>
+      </div>
+      <div class="terminal-body">
+<span class="muted">$</span> <span class="green">npx mix-id</span> https://mixcloud.com/dj/friday-night-set
+<br>
+<span class="muted">📥 Downloading...</span>
+<span class="green">✅ friday-night-set.mp3 (186.4 MB)</span>
+<br>
+<span class="purple">🎵 mix-id</span>
+<span class="dim">──────────────────────────────────────────</span>
+<span class="muted">File:     friday-night-set.mp3</span>
+<span class="muted">Duration: 1:45:20</span>
+<span class="muted">Settings: 60s step, 18s sample</span>
+<span class="dim">──────────────────────────────────────────</span>
+<br>
+<span class="muted">[00:00]</span>  <span class="green">✅</span> Donna Summer — I Feel Love
+<span class="muted">[03:30]</span>  <span class="green">✅</span> Daft Punk — Around the World
+<span class="muted">[07:00]</span>  <span class="green">✅</span> Bicep — Glue
+<span class="muted">[11:30]</span>  <span class="green">✅</span> The Avalanches — Since I Left You
+<span class="muted">[15:00]</span>  <span class="green">✅</span> Caribou — Can't Do Without You
+<span class="muted">[19:30]</span>  <span class="green">✅</span> Peggy Gou — Starry Night
+<span class="muted">...</span>
+<br>
+<span class="dim">──────────────────────────────────────────</span>
+<span class="purple">🎧 TRACKLIST</span> <span class="muted">— 24 tracks identified</span>
+<span class="dim">──────────────────────────────────────────</span>
+<br>
+<span class="muted">💾 Output:</span>
+   friday-night-set_tracklist<span class="yellow">.txt</span>
+   friday-night-set<span class="yellow">.cue</span>
+   friday-night-set_tracklist<span class="yellow">.json</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sources -->
+  <section class="sources-section">
+    <h2>Paste any link.</h2>
+    <p>Works with 1000+ sites via yt-dlp — or drop in a local file.</p>
+    <div class="source-grid">
+      <div class="source-card">
+        <div class="source-icon">☁️</div>
+        <div class="source-name">Mixcloud</div>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">🔊</div>
+        <div class="source-name">SoundCloud</div>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">▶️</div>
+        <div class="source-name">YouTube</div>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">🎵</div>
+        <div class="source-name">Bandcamp</div>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">📁</div>
+        <div class="source-name">Local files</div>
+        <div class="source-plus">mp3, wav, flac, m4a</div>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">🌐</div>
+        <div class="source-name">1000+ more</div>
+        <div class="source-plus">via yt-dlp</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-section" id="how">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div class="step-content">
+          <h3>Download</h3>
+          <p>Give it a URL or local file. yt-dlp handles the download from any supported platform.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div class="step-content">
+          <h3>Scan</h3>
+          <p>Audio gets split into segments and fingerprinted against Shazam's catalog of 100M+ songs.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div class="step-content">
+          <h3>Identify</h3>
+          <p>Matches are deduplicated, timestamped, and output as a clean tracklist in TXT, CUE, and JSON.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Output Formats -->
+  <section class="formats-section">
+    <h2>Three output formats.</h2>
+    <div class="format-grid">
+      <div class="format-card">
+        <div class="format-ext">.txt</div>
+        <h3>Tracklist</h3>
+        <p>Paste-friendly. Perfect for Mixcloud descriptions, show notes, or social posts.</p>
+      </div>
+      <div class="format-card">
+        <div class="format-ext">.cue</div>
+        <h3>CUE sheet</h3>
+        <p>Import into DJ software, media players, or audio editors with track markers.</p>
+      </div>
+      <div class="format-card">
+        <div class="format-ext">.json</div>
+        <h3>Structured data</h3>
+        <p>Full metadata — title, artist, album, timestamps. Build on top of it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="updates">
+    <h2>Stay in the loop.</h2>
+    <p>Get notified about new features — web version, playlist export, and more.</p>
+    <form class="email-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="email" name="email" placeholder="you@example.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+    <p class="cta-note">No spam. Just updates when something ships.</p>
+  </section>
+
+  <footer>
+    <p>
+      Built by <a href="https://scottkbell.com">Scott Bell</a> · 
+      <a href="https://github.com/skip5this/mix-id">GitHub</a> · 
+      <a href="https://www.npmjs.com/package/mix-id">npm</a> ·
+      Free &amp; open source (MIT)
+    </p>
+  </footer>
+
+  <script>
+    function copyInstall(el) {
+      navigator.clipboard.writeText('npx mix-id https://mixcloud.com/your-mix-url');
+      el.classList.add('copied');
+      el.querySelector('.copy-hint').textContent = 'copied!';
+      setTimeout(() => {
+        el.classList.remove('copied');
+        el.querySelector('.copy-hint').textContent = 'click to copy';
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
